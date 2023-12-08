@@ -2,10 +2,10 @@
 name = "sokoban-level-generator"
 version = "0.0.0-development"
 edition = "2021"
-authors = ["Christoph Bühler <cbuehler@rootd.ch>"]
+authors = ["Christoph Bühler <christoph@smartive.ch>"]
 license = "Apache-2.0"
 license-file = "LICENSE"
-repository = "https://github.com/buehler/rust-sokoban-level-generator"
+repository = "https://github.com/smartive/rust-sokoban-level-generator"
 
 [dependencies]
 ndarray = "0.15.6"
