@@ -24,6 +24,13 @@ impl Cell {
         }
     }
 
+    pub(crate) fn to_encoding_char(&self) -> char {
+        match self {
+            Self::Empty | Self::Floor | Self::SpecialFloor => '-',
+            _ => self.to_char(),
+        }
+    }
+
     pub(crate) fn is_floor(&self) -> bool {
         match self {
             Self::Floor | Self::SpecialFloor => true,

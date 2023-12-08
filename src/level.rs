@@ -36,7 +36,60 @@ pub fn generate_level(height: u8, width: u8, boxes: u8) -> Level {
 }
 
 /// Create the string representation of a level.
-pub fn level_to_string(level: &Level) -> String {
+/// This creates an exchangeable string that can be used
+/// to share the levels with others.
+///
+/// The notation is from [JSoko Level Format](https://www.sokoban-online.de/sokoban/levell-format/).
+///
+/// This uses the "Runlength encoding":
+/// `#### becomes 4#`
+///
+/// #### Example
+/// ```text
+/// #######
+/// #.@ # #
+/// #$* $ #
+/// #   $ #
+/// # ..  #
+/// #  *  #
+/// #######
+/// ```
+/// becomes
+///
+/// `7#|#.@-#-#|#$*-$-#|#3-$-#|#-..--#|#--*--#|7#`
+pub fn encode_level(level: &Level) -> String {
+    let mut encoding = String::new();
+    let mut last_char = '\0';
+
+    for row in level.rows() {
+        let mut count = 0;
+        for cell in row {
+            let char = cell.to_encoding_char();
+            if char == last_char {
+                count += 1;
+            } else {
+                if last_char != '\0' {
+                    encoding.push_str(&format!("{}{}", count, last_char));
+                }
+                count = 1;
+                last_char = char;
+            }
+        }
+
+        if last_char != '\0' {
+            encoding.push_str(&format!("{}{}", count, last_char));
+        }
+
+        encoding.push('|');
+    }
+
+    encoding.pop();
+    encoding
+}
+
+/// Print the level to a string with new-lines.
+/// The notation is from [JSoko Level Format](https://www.sokoban-online.de/sokoban/levell-format/).
+pub fn pretty_print_level(level: &Level) -> String {
     let (w, h) = level.dim();
     let mut print = String::with_capacity((w * h + h).into());
 
